@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# Usage: ./create_manifests.sh <base_tag>
+# Usage: ./create-manifests.sh <base_tag>
 
 base_tag=$1
 
