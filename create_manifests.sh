@@ -24,7 +24,7 @@ base_tag=$1
 
 # Registries configuration
 declare -A registries=(
-    ["ghcr"]="ghcr.io/tamatebako"
+    ["ghcr"]="sw.consulting"
 )
 
 # Create and push manifest for each registry
