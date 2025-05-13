@@ -173,11 +173,12 @@ jobs:
 
       - name: Create multiarchitecture manifests and push
         run: |
+            chmod +x ./create-manifests.sh
             for tag in $(echo "${{ needs.build-containers.outputs.tags }}" | tr ',' '\n'); do
               if [[ $tag != *:latest ]]; then
                 base_tag=$(echo $tag | sed -E 's/.*:(.*)-(amd64|arm64)/\1/')
                 echo "Processing $tag, using base tag $base_tag"
-                ./tools/create-manifests.sh "$base_tag"
+                ./create-manifests.sh "$base_tag"
               fi
             done
 
