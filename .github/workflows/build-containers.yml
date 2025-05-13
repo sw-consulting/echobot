@@ -73,9 +73,20 @@ jobs:
       - name: Check container is running
         run: |
           if docker ps --no-trunc | grep $CONTAINER_ID; then
-            echo "Container is running correctly"
+            echo "Container is running"
           else
             echo "Container failed to start or crashed"
+            docker logs $CONTAINER_ID
+            exit 1
+          fi
+
+      - name: Check logs for successful startup
+        run: |
+          docker logs $CONTAINER_ID
+          if docker logs $CONTAINER_ID | grep -q "Bot started"; then
+            echo "Bot started successfully"
+          else
+            echo "Bot did not start properly"
             docker logs $CONTAINER_ID
             exit 1
           fi
@@ -210,16 +221,14 @@ jobs:
           echo "Published container started with ID: $container_id"
 
       - name: Wait for container to initialize
-        run: sleep 15
+        run: sleep 10
 
       - name: Check container is running
         run: |
-          docker ps -a
-          container_status=$(docker inspect -f '{{.State.Status}}' $CONTAINER_ID)
-          if [ "$container_status" = "running" ]; then
-            echo "Published container is running correctly"
+          if docker ps --no-trunc | grep $CONTAINER_ID; then
+            echo "Container is running"
           else
-            echo "Published container failed to start or crashed (status: $container_status)"
+            echo "Container failed to start or crashed"
             docker logs $CONTAINER_ID
             exit 1
           fi
