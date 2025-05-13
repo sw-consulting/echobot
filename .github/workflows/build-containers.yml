@@ -73,6 +73,7 @@ jobs:
 
       - name: Check container is running
         run: |
+          docker ps -a
           if docker ps | grep $CONTAINER_ID; then
             echo "Container is running correctly"
           else
