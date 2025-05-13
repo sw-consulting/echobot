@@ -22,16 +22,14 @@ name: build-containers
 on:
   push:
     paths-ignore:
-      - '**.adoc'
-      - '**.txt'
-      - '**.md'
+      - '*.adoc'
+      - '*.md'
     tags:
       - "v*"
   pull_request:
     paths-ignore:
-      - '**.adoc'
-      - '**.txt'
-      - '**.md'
+      - '*.adoc'
+      - '*.md'
   workflow_dispatch:
 
 concurrency:
