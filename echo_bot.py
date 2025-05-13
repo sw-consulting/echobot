@@ -31,12 +31,12 @@ async def echo_voice(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_voice(update.message.voice.file_id)
 
 # Signal handler for graceful shutdown
-def signal_handler(signal_num, frame):
+def signal_handler(signal_num, frame, app):
     print(f"Received signal {signal_num}. Shutting down...")
     loop = asyncio.get_event_loop()
-    loop.call_soon_threadsafe(asyncio.create_task, shutdown())
+    loop.call_soon_threadsafe(asyncio.create_task, shutdown(app))
 
-async def shutdown():
+async def shutdown(app):
     """Gracefully shut down the bot application"""
     print("Stopping the bot...")
     await app.stop()
