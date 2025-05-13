@@ -80,6 +80,11 @@ jobs:
             exit 1
           fi
 
+      - name: Stop container
+        run: |
+          docker stop $CONTAINER_ID
+          docker logs $CONTAINER_ID
+
       - name: Check logs for successful startup
         run: |
           docker logs $CONTAINER_ID
@@ -90,11 +95,6 @@ jobs:
             docker logs $CONTAINER_ID
             exit 1
           fi
-
-      - name: Stop container
-        run: |
-          docker stop $CONTAINER_ID
-          docker logs $CONTAINER_ID
 
   build-containers:
     name: Build echobot container for ${{ matrix.architecture.platform }} platform
@@ -233,6 +233,11 @@ jobs:
             exit 1
           fi
 
+      - name: Stop container
+        run: |
+          docker stop $CONTAINER_ID
+          docker logs $CONTAINER_ID
+
       - name: Check logs for successful startup
         run: |
           if docker logs $CONTAINER_ID | grep -q "Bot started"; then
@@ -242,8 +247,3 @@ jobs:
             docker logs $CONTAINER_ID
             exit 1
           fi
-
-      - name: Stop container
-        run: |
-          docker stop $CONTAINER_ID
-          docker logs $CONTAINER_ID
