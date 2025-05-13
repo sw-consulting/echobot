@@ -201,7 +201,7 @@ jobs:
 
       - name: Pull published container
         run: |
-          docker pull ghcr.io/sw.consulting/echobot:${{ steps.get_version.outputs.VERSION }}
+          docker pull ghcr.io/sw-consulting/echobot:${{ steps.get_version.outputs.VERSION }}
 
       - name: Run published container
         run: |
