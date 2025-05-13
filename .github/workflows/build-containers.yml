@@ -121,7 +121,7 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/sw.consulting/echobot
+            ghcr.io/sw-consulting/echobot
           tags: |
             type=semver,pattern={{version}}-${{ matrix.architecture.suffix2 }}
             type=semver,pattern={{major}}.{{minor}}-${{ matrix.architecture.suffix2 }}
