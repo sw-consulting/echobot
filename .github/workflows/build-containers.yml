@@ -38,9 +38,59 @@ concurrency:
   group: '${{ github.workflow }}-${{ github.job }}-${{ github.head_ref || github.ref_name }}'
   cancel-in-progress: true
 
+env:
+  BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+
 jobs:
+  test-container:
+    name: Test container functionality
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.ref, 'refs/tags/v') }}  # Only run on non-tag pushes to save resources
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build container locally for testing
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: echobot:test
+
+      - name: Create .env file with test token
+        run: |
+          echo "BOT_TOKEN=${{ secrets.BOT_TOKEN }}" > .env
+
+      - name: Start container
+        run: |
+          container_id=$(docker run -d --env-file .env --name echobot-test echobot:test)
+          echo "CONTAINER_ID=$container_id" >> $GITHUB_ENV
+          echo "Container started with ID: $container_id"
+
+      - name: Wait for container to initialize
+        run: sleep 10
+
+      - name: Check container is running
+        run: |
+          if docker ps | grep $CONTAINER_ID; then
+            echo "Container is running correctly"
+          else
+            echo "Container failed to start or crashed"
+            docker logs $CONTAINER_ID
+            exit 1
+          fi
+
+      - name: Stop container
+        run: |
+          docker stop $CONTAINER_ID
+          docker logs $CONTAINER_ID
+
   build-containers:
-    name: Echobot for ${{ matrix.architecture.platform }} platform
+    name: Build echobot container for ${{ matrix.architecture.platform }} platform
+    needs: test-container
     runs-on: ${{ matrix.architecture.host }}
     permissions:
       contents: read
@@ -101,6 +151,7 @@ jobs:
           annotations: ${{ steps.meta.outputs.annotations }}
           platforms: ${{ matrix.architecture.platform }}
           build-args: ARCH=${{ matrix.architecture.suffix }}
+
 
   create-manifests:
     name: Create multiarchitecture manifests
