@@ -205,7 +205,7 @@ jobs:
 
       - name: Run published container
         run: |
-          container_id=$(docker run -d --env-file .env --name echobot-published ghcr.io/sw.consulting/echobot:${{ steps.get_version.outputs.VERSION }})
+          container_id=$(docker run -d --env-file .env --name echobot-published ghcr.io/sw-consulting/echobot:${{ steps.get_version.outputs.VERSION }})
           echo "CONTAINER_ID=$container_id" >> $GITHUB_ENV
           echo "Published container started with ID: $container_id"
 
