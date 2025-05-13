@@ -23,5 +23,5 @@ services:
   telegram-echo-bot:
     build: .
     environment:
-      - BOT_TOKEN=7962200159:AAHAu6NgVOS5d3FMcXbj_JOuVQP3jNJIE3Q
+      - BOT_TOKEN=${BOT_TOKEN}
     restart: unless-stopped

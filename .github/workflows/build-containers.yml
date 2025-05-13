@@ -178,6 +178,6 @@ jobs:
               if [[ $tag != *:latest ]]; then
                 base_tag=$(echo $tag | sed -E 's/.*:(.*)-(amd64|arm64)/\1/')
                 echo "Processing $tag, using base tag $base_tag"
-                ./tools/create-manifests.sh "${{ matrix.container }}" "$base_tag"
+                ./tools/create-manifests.sh "$base_tag"
               fi
             done
